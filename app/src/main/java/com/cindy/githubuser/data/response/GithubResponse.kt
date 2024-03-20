@@ -163,7 +163,7 @@ data class DetailUserResponse(
 	val following: Int? = null,
 
 	@field:SerializedName("name")
-	val name: Any? = null,
+	val name: String? = null,
 
 	@field:SerializedName("location")
 	val location: Any? = null,

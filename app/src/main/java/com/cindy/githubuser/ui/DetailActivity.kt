@@ -36,14 +36,16 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setUsersDetail(detail: DetailUserResponse) {
-        detailBinding.tvUser.text = detail.login
-        val followers = "${detail.followers} Followers"
-        detailBinding.tvFollowers.text = followers
-        val following = "${detail.following} Following"
-        detailBinding.tvFollowing.text = following
-        Glide.with(this@DetailActivity)
-            .load(detail.avatarUrl)
-            .into(detailBinding.imgProfileUser)
+            detailBinding.tvUser.text = detail.login
+            val nameUser = detail.name?: detail.login
+            detailBinding.tvName.text = nameUser
+            val followers = "${detail.followers} Followers"
+            detailBinding.tvFollowers.text = followers
+            val following = "${detail.following} Following"
+            detailBinding.tvFollowing.text = following
+            Glide.with(this@DetailActivity)
+                .load(detail.avatarUrl)
+                .into(detailBinding.imgProfileUser)
     }
 
     private fun showLoading(isLoading: Boolean) {
