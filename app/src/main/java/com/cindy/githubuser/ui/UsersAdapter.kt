@@ -6,20 +6,23 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.cindy.githubuser.data.response.GithubResponse
 import com.cindy.githubuser.data.response.ItemsItem
 import com.cindy.githubuser.databinding.ItemUsersBinding
 
-class UsersAdapter : ListAdapter<ItemsItem, UsersAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class UsersAdapter (private val onItemClickCallback: OnItemClickCallback) : ListAdapter<ItemsItem, UsersAdapter.MyViewHolder>(DIFF_CALLBACK) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemUsersBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val review = getItem(position)
-        holder.bind(review)
+        val user = getItem(position)
+        holder.bind(user)
+        holder.itemView.setOnClickListener{
+            onItemClickCallback.onItemClicked(user)
+        }
     }
-    class MyViewHolder(val binding: ItemUsersBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MyViewHolder(val binding: ItemUsersBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(user: ItemsItem){
             binding.tvUsername.text = user.login
             Glide.with(this.itemView.context)
@@ -36,5 +39,8 @@ class UsersAdapter : ListAdapter<ItemsItem, UsersAdapter.MyViewHolder>(DIFF_CALL
                 return oldItem == newItem
             }
         }
+    }
+    interface OnItemClickCallback {
+        fun onItemClicked(data: ItemsItem)
     }
 }
