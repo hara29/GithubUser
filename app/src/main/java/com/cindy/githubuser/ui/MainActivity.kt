@@ -1,5 +1,6 @@
 package com.cindy.githubuser.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -13,6 +14,7 @@ import com.cindy.githubuser.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    // private lateinit var adapter: UsersAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,11 +23,11 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+        // MainViewModel
         val mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
         mainViewModel.listUsers.observe(this) { users ->
             setUsersData(users)
         }
-
         mainViewModel.isLoading.observe(this) {
             showLoading(it)
         }
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvHeroes.addItemDecoration(itemDecoration)
 
+        // SearchBar
         with(binding) {
             searchView.setupWithSearchBar(searchBar)
             // listener ketika editText diedit
@@ -60,10 +63,17 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 
+    val adapter = UsersAdapter(object : UsersAdapter.OnItemClickCallback{
+        override fun onItemClicked(data: ItemsItem) {
+            val moveDataIntent = Intent(this@MainActivity, DetailActivity::class.java)
+            moveDataIntent.putExtra(DetailActivity.EXTRA_USERNAME, data.login)
+            startActivity(moveDataIntent)
+        }
+    })
     private fun setUsersData(userItems: List<ItemsItem>) {
-        val adapter = UsersAdapter()
         adapter.submitList(userItems)
         binding.rvHeroes.adapter = adapter
     }
