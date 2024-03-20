@@ -2,6 +2,8 @@ package com.cindy.githubuser.ui
 
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -24,16 +26,40 @@ class MainActivity : AppCompatActivity() {
             setUsersData(users)
         }
 
+        mainViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
+
         // mengatur layout recycle view user
         val layoutManager = LinearLayoutManager(this)
         binding.rvHeroes.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvHeroes.addItemDecoration(itemDecoration)
 
-        mainViewModel.isLoading.observe(this) {
-            showLoading(it)
+        with(binding) {
+            searchView.setupWithSearchBar(searchBar)
+            // listener ketika editText diedit
+            searchView.editText.setOnEditorActionListener { textView, actionId, event ->
+                // Mengatur text pada searchView ke dalam serachBar
+                searchBar.setText(searchView.getText())
+                // Ketika pencarian
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    // ambil text pada searchView
+                    val query = searchView.text.toString().trim()
+                    // cek jika text tidak kosong, maka cari user berdasarkan query text
+                    if (query.isNotEmpty()) {
+                        mainViewModel.searchUsers(query)
+                    } else {
+                        Toast.makeText(this@MainActivity, "Please enter a search query", Toast.LENGTH_SHORT).show()
+                    }
+                    // Sembunyikan SearchView setelah teks dimasukkan dan tombol enter ditekan
+                    searchView.hide()
+                    true
+                } else {
+                    false
+                }
+            }
         }
-        // findUsers()
     }
 
     private fun setUsersData(userItems: List<ItemsItem>) {
