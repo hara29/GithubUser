@@ -22,11 +22,15 @@ class MainViewModel: ViewModel() {
     }
 
     init {
-        findUsers()
+        findUsers(LOGIN)
     }
-    private fun findUsers() {
+
+    fun searchUsers(query: String) {
+        findUsers(query)
+    }
+    private fun findUsers(query: String) {
         _isLoading.value = true
-        val client = ApiConfig.getApiService().getUsers(LOGIN)
+        val client = ApiConfig.getApiService().getUsers(query)
         // mengeksekusi request secara asynchronous
         client.enqueue(object : Callback<GithubResponse> {
             override fun onResponse(
