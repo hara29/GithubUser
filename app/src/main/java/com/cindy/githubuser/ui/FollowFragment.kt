@@ -25,7 +25,7 @@ class FollowFragment : Fragment() {
         _binding = FragmentFollowBinding.inflate(inflater,container,false)
         return binding.root
     }
-//    override fun onCreateView(
+    //    override fun onCreateView(
 //        inflater: LayoutInflater, container: ViewGroup?,
 //        savedInstanceState: Bundle?
 //    ): View? {
@@ -78,9 +78,9 @@ class FollowFragment : Fragment() {
     }
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
-            binding.progressBar2.visibility = View.VISIBLE
+            _binding?.progressBar3?.visibility = View.VISIBLE
         } else {
-            binding.progressBar2.visibility = View.GONE
+            _binding?.progressBar3?.visibility = View.GONE
         }
     }
 

@@ -44,13 +44,9 @@ class MainActivity : AppCompatActivity() {
         // SearchBar
         with(binding) {
             searchView.setupWithSearchBar(searchBar)
-            // listener ketika editText diedit
             searchView.editText.setOnEditorActionListener { textView, actionId, event ->
-                // Mengatur text pada searchView ke dalam serachBar
                 searchBar.setText(searchView.getText())
-                // Ketika pencarian
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    // ambil text pada searchView
                     val query = searchView.text.toString().trim()
                     // cek jika text tidak kosong, maka cari user berdasarkan query text
                     if (query.isNotEmpty()) {

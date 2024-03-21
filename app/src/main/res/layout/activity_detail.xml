@@ -64,18 +64,18 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabs" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-<!--    android:background="?attr/colorPrimary"-->
+    <!--    android:background="?attr/colorPrimary"-->
+    <!--    app:tabTextColor="@android:color/white"-->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:tabTextColor="@android:color/white" />
+        app:layout_constraintTop_toTopOf="@+id/guideline"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
