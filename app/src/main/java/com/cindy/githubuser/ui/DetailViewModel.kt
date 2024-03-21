@@ -25,7 +25,7 @@ class DetailViewModel: ViewModel() {
         findDetailUser(query)
     }
 
-    fun findDetailUser(username: String) {
+    private fun findDetailUser(username: String) {
         _isLoading.value = true
         val client = ApiConfig.getApiService().getDetailUser(username)
         client.enqueue(object : Callback<DetailUserResponse> {

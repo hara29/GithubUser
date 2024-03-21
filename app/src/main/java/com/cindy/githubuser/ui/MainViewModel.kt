@@ -14,6 +14,7 @@ import retrofit2.Response
 class MainViewModel: ViewModel() {
     private val _listUsers = MutableLiveData<List<ItemsItem>>()
     val listUsers: LiveData<List<ItemsItem>> = _listUsers
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     companion object{
