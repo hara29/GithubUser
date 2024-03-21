@@ -1,4 +1,4 @@
-package com.cindy.githubuser.ui
+package com.cindy.githubuser.ui.detail
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

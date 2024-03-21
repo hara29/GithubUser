@@ -1,4 +1,4 @@
-package com.cindy.githubuser.ui
+package com.cindy.githubuser.ui.detail
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -29,7 +29,6 @@ class FollowViewModel: ViewModel() {
     private fun findFollowers(query: String) {
         _isLoading.value = true
         val client = ApiConfig.getApiService().getFollowers(query)
-        // mengeksekusi request secara asynchronous
         client.enqueue(object : Callback<List<ItemsItem>> {
             override fun onResponse(
                 call: Call<List<ItemsItem>>,
@@ -43,7 +42,6 @@ class FollowViewModel: ViewModel() {
                     }
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
-                    // Toast.makeText(FollowFragment, "Error Response API", Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<List<ItemsItem>>, t: Throwable) {
@@ -55,7 +53,6 @@ class FollowViewModel: ViewModel() {
     private fun findFollowing(query: String) {
         _isLoading.value = true
         val client = ApiConfig.getApiService().getFollowing(query)
-        // mengeksekusi request secara asynchronous
         client.enqueue(object : Callback<List<ItemsItem>> {
             override fun onResponse(
                 call: Call<List<ItemsItem>>,

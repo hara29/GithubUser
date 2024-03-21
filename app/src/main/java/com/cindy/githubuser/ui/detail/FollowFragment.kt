@@ -1,4 +1,4 @@
-package com.cindy.githubuser.ui
+package com.cindy.githubuser.ui.detail
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cindy.githubuser.data.response.ItemsItem
 import com.cindy.githubuser.databinding.FragmentFollowBinding
+import com.cindy.githubuser.ui.UsersAdapter
 import kotlin.properties.Delegates
 
 class FollowFragment : Fragment() {
@@ -33,10 +34,7 @@ class FollowFragment : Fragment() {
         val itemDecoration = DividerItemDecoration(requireActivity(), layoutManager.orientation)
         binding.rvHeroes.addItemDecoration(itemDecoration)
 
-        // followViewModel
-        // val followViewModel = ViewModelProvider(this)[FollowViewModel::class.java]
-        // val followViewModel = ViewModelProvider(this).get(FollowViewModel::class.java)
-        val followViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FollowViewModel::class.java)
+        val followViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[FollowViewModel::class.java]
         followViewModel.listFollowers.observe(viewLifecycleOwner) { username ->
             setFollow(username)
         }
@@ -59,7 +57,7 @@ class FollowFragment : Fragment() {
 
     }
 
-    private val adapter = UsersAdapter(object : UsersAdapter.OnItemClickCallback{
+    private val adapter = UsersAdapter(object : UsersAdapter.OnItemClickCallback {
         override fun onItemClicked(data: ItemsItem) {
             val moveDataIntent = Intent(activity, DetailActivity::class.java)
             moveDataIntent.putExtra(DetailActivity.EXTRA_USERNAME, data.login)

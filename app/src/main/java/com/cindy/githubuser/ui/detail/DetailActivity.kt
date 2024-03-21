@@ -1,4 +1,4 @@
-package com.cindy.githubuser.ui
+package com.cindy.githubuser.ui.detail
 
 import android.os.Bundle
 import android.view.View
@@ -30,8 +30,7 @@ class DetailActivity : AppCompatActivity() {
 
         val username = intent.getStringExtra(EXTRA_USERNAME)
 
-        val detailViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
-            DetailViewModel::class.java)
+        val detailViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[DetailViewModel::class.java]
         if (username != null) {
                 detailViewModel.searchUsers(username)
         }
@@ -53,7 +52,6 @@ class DetailActivity : AppCompatActivity() {
             }.attach()
             supportActionBar?.elevation = 0f
         }
-
     }
 
     private fun setUsersDetail(detail: DetailUserResponse) {
@@ -76,5 +74,4 @@ class DetailActivity : AppCompatActivity() {
             detailBinding.progressBar2.visibility = View.GONE
         }
     }
-
 }

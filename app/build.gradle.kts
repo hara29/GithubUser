@@ -6,6 +6,7 @@ plugins {
 android {
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
     namespace = "com.cindy.githubuser"
     compileSdk = 34
@@ -18,6 +19,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "API_KEY", "\"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\"")
+        buildConfigField("String", "BASE_URL", "\"https://api.github.com/\"")
+
     }
 
     buildTypes {
