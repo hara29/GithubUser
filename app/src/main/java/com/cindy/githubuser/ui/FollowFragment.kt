@@ -40,7 +40,8 @@ class FollowFragment : Fragment() {
         binding.rvHeroes.addItemDecoration(itemDecoration)
 
         // followViewModel
-        val followViewModel = ViewModelProvider(this).get(FollowViewModel::class.java)
+        val followViewModel = ViewModelProvider(this)[FollowViewModel::class.java]
+        // val followViewModel = ViewModelProvider(this).get(FollowViewModel::class.java)
         // val followViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FollowViewModel::class.java)
         followViewModel.listFollowers.observe(viewLifecycleOwner) { username ->
             setFollow(username)
@@ -64,7 +65,7 @@ class FollowFragment : Fragment() {
 
     }
 
-    val adapter = UsersAdapter(object : UsersAdapter.OnItemClickCallback{
+    private val adapter = UsersAdapter(object : UsersAdapter.OnItemClickCallback{
         override fun onItemClicked(data: ItemsItem) {
             val moveDataIntent = Intent(activity, DetailActivity::class.java)
             moveDataIntent.putExtra(DetailActivity.EXTRA_USERNAME, data.login)
@@ -78,9 +79,9 @@ class FollowFragment : Fragment() {
     }
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
-            _binding?.progressBar3?.visibility = View.VISIBLE
+            binding.progressBar3.visibility = View.VISIBLE
         } else {
-            _binding?.progressBar3?.visibility = View.GONE
+            binding.progressBar3.visibility = View.GONE
         }
     }
 
