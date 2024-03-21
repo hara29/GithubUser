@@ -43,6 +43,7 @@ class FollowViewModel: ViewModel() {
                     }
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
+                    // Toast.makeText(FollowFragment, "Error Response API", Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<List<ItemsItem>>, t: Throwable) {

@@ -28,8 +28,6 @@ class DetailActivity : AppCompatActivity() {
         detailBinding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(detailBinding.root)
 
-        // supportActionBar?.hide()
-
         val username = intent.getStringExtra(EXTRA_USERNAME)
 
         val detailViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(

@@ -25,12 +25,6 @@ class FollowFragment : Fragment() {
         _binding = FragmentFollowBinding.inflate(inflater,container,false)
         return binding.root
     }
-    //    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        return inflater.inflate(R.layout.fragment_follow, container, false)
-//    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -40,9 +34,9 @@ class FollowFragment : Fragment() {
         binding.rvHeroes.addItemDecoration(itemDecoration)
 
         // followViewModel
-        val followViewModel = ViewModelProvider(this)[FollowViewModel::class.java]
+        // val followViewModel = ViewModelProvider(this)[FollowViewModel::class.java]
         // val followViewModel = ViewModelProvider(this).get(FollowViewModel::class.java)
-        // val followViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FollowViewModel::class.java)
+        val followViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FollowViewModel::class.java)
         followViewModel.listFollowers.observe(viewLifecycleOwner) { username ->
             setFollow(username)
         }
