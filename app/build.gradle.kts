@@ -60,4 +60,8 @@ dependencies {
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     // Gridle
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    // Material Design
+    implementation("com.google.android.material:material:1.11.0")
+    // ViewPager2
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 }
