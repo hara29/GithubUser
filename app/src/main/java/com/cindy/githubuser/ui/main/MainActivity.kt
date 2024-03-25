@@ -6,9 +6,11 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cindy.githubuser.R
 import com.cindy.githubuser.data.response.ItemsItem
 import com.cindy.githubuser.databinding.ActivityMainBinding
 import com.cindy.githubuser.ui.detail.DetailActivity
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -30,6 +33,11 @@ class MainActivity : AppCompatActivity() {
         }
         mainViewModel.isLoading.observe(this) {
             showLoading(it)
+        }
+        mainViewModel.errorToast.observe(this) { message ->
+            if (message != null) {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            }
         }
 
         val layoutManager = LinearLayoutManager(this)
@@ -46,7 +54,8 @@ class MainActivity : AppCompatActivity() {
                     if (query.isNotEmpty()) {
                         mainViewModel.searchUsers(query)
                     } else {
-                        Toast.makeText(this@MainActivity, "Please enter a search query", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity,
+                            getString(R.string.enter_query_warning), Toast.LENGTH_SHORT).show()
                     }
                     searchView.hide()
                     true

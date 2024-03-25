@@ -2,15 +2,14 @@ package com.cindy.githubuser.ui.detail
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.cindy.githubuser.R
 import com.cindy.githubuser.data.response.DetailUserResponse
 import com.cindy.githubuser.databinding.ActivityDetailBinding
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailActivity : AppCompatActivity() {
@@ -40,31 +39,35 @@ class DetailActivity : AppCompatActivity() {
         detailViewModel.isLoading.observe(this) {
             showLoading(it)
         }
+        detailViewModel.errorToast.observe(this) { message ->
+            if (message != null) {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            }
+        }
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
         if (username != null) {
-            sectionsPagerAdapter.username  = username
-            val viewPager: ViewPager2 = findViewById(R.id.view_pager)
-            viewPager.adapter = sectionsPagerAdapter
-            val tabs: TabLayout = findViewById(R.id.tabs)
-            TabLayoutMediator(tabs, viewPager) { tab, position ->
-                tab.text = resources.getString(TAB_TITLES[position])
-            }.attach()
-            supportActionBar?.elevation = 0f
+            with(detailBinding){
+                sectionsPagerAdapter.username  = username
+                viewPager.adapter = sectionsPagerAdapter
+                TabLayoutMediator(tabs, viewPager) { tab, position ->
+                    tab.text = resources.getString(TAB_TITLES[position])
+                }.attach()
+                supportActionBar?.elevation = 0f
+            }
         }
     }
 
     private fun setUsersDetail(detail: DetailUserResponse) {
-            detailBinding.tvUser.text = detail.login
-            val nameUser = detail.name?: detail.login
-            detailBinding.tvName.text = nameUser
-            val followers = "${detail.followers} Followers"
-            detailBinding.tvFollowers.text = followers
-            val following = "${detail.following} Following"
-            detailBinding.tvFollowing.text = following
+        with(detailBinding){
+            tvUser.text = detail.login
+            tvName.text = detail.name?: detail.login
+            tvFollowers.text = StringBuilder(detail.followers.toString()).append(" Followers")
+            tvFollowing.text = StringBuilder(detail.following.toString()).append(" Following")
             Glide.with(this@DetailActivity)
                 .load(detail.avatarUrl)
-                .into(detailBinding.imgProfileUser)
+                .into(imgProfileUser)
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {

@@ -13,10 +13,15 @@ import retrofit2.Response
 class FollowViewModel: ViewModel() {
     private val _listFollowers = MutableLiveData<List<ItemsItem>>()
     val listFollowers: LiveData<List<ItemsItem>> = _listFollowers
+
     private val _listFollowing = MutableLiveData<List<ItemsItem>>()
     val listFollowing: LiveData<List<ItemsItem>> = _listFollowing
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _errorToast = MutableLiveData<String>()
+    val errorToast: LiveData<String> = _errorToast
     companion object{
         private const val TAG = "FollowViewModel"
     }
@@ -41,11 +46,13 @@ class FollowViewModel: ViewModel() {
                         _listFollowers.value = responseBody
                     }
                 } else {
+                    _errorToast.value = response.message()
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
             override fun onFailure(call: Call<List<ItemsItem>>, t: Throwable) {
                 _isLoading.value = false
+                _errorToast.value = t.message
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })
@@ -65,11 +72,13 @@ class FollowViewModel: ViewModel() {
                         _listFollowing.value = responseBody
                     }
                 } else {
+                    _errorToast.value = response.message()
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
             override fun onFailure(call: Call<List<ItemsItem>>, t: Throwable) {
                 _isLoading.value = false
+                _errorToast.value = t.message
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })

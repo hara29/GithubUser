@@ -17,6 +17,9 @@ class MainViewModel: ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _errorToast = MutableLiveData<String>()
+    val errorToast: LiveData<String> = _errorToast
     companion object{
         private const val TAG = "MainViewModel"
         private const val LOGIN = "Arif"
@@ -44,11 +47,13 @@ class MainViewModel: ViewModel() {
                         _listUsers.value = response.body()?.items
                     }
                 } else {
+                    _errorToast.value = response.message()
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
             override fun onFailure(call: Call<GithubResponse>, t: Throwable) {
                 _isLoading.value = false
+                _errorToast.value = t.message
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })

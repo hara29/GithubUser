@@ -17,6 +17,9 @@ class DetailViewModel: ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _errorToast = MutableLiveData<String>()
+    val errorToast: LiveData<String> = _errorToast
     companion object{
         private const val TAG = "DetailViewModel"
     }
@@ -40,12 +43,14 @@ class DetailViewModel: ViewModel() {
                         _detailUser.value = response.body()
                     }
                 } else {
+                    _errorToast.value = response.message()
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<DetailUserResponse>, t: Throwable) {
                 _isLoading.value = false
+                _errorToast.value = t.message
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })
