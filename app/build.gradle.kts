@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
+    id("kotlin-parcelize")
 }
 
 android {
@@ -10,6 +12,14 @@ android {
     }
     namespace = "com.cindy.githubuser"
     compileSdk = 34
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 
     defaultConfig {
         applicationId = "com.cindy.githubuser"
@@ -71,4 +81,16 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     // Splash Screen API
     implementation ("androidx.core:core-splashscreen:1.0.1")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+    implementation("androidx.room:room-runtime:2.5.2")
+    ksp("androidx.room:room-compiler:2.5.2")
+
+    //coroutine support
+    implementation("androidx.room:room-ktx:2.4.0")
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
 }

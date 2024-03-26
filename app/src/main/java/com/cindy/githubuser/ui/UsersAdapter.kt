@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.cindy.githubuser.data.response.ItemsItem
+import com.cindy.githubuser.data.remote.response.ItemsItem
 import com.cindy.githubuser.databinding.ItemUsersBinding
 
 class UsersAdapter (private val onItemClickCallback: OnItemClickCallback) : ListAdapter<ItemsItem, UsersAdapter.MyViewHolder>(DIFF_CALLBACK) {

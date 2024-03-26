@@ -4,18 +4,18 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.cindy.githubuser.data.response.ItemsItem
-import com.cindy.githubuser.data.retrofit.ApiConfig
+import com.cindy.githubuser.data.remote.response.ItemsItem
+import com.cindy.githubuser.data.remote.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class FollowViewModel: ViewModel() {
-    private val _listFollowers = MutableLiveData<List<ItemsItem>>()
-    val listFollowers: LiveData<List<ItemsItem>> = _listFollowers
+    private val _listFollowers = MutableLiveData<List<ItemsItem>?>()
+    val listFollowers: MutableLiveData<List<ItemsItem>?> = _listFollowers
 
-    private val _listFollowing = MutableLiveData<List<ItemsItem>>()
-    val listFollowing: LiveData<List<ItemsItem>> = _listFollowing
+    private val _listFollowing = MutableLiveData<List<ItemsItem>?>()
+    val listFollowing: MutableLiveData<List<ItemsItem>?> = _listFollowing
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading

@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.cindy.githubuser.data.response.GithubResponse
-import com.cindy.githubuser.data.response.ItemsItem
-import com.cindy.githubuser.data.retrofit.ApiConfig
+import com.cindy.githubuser.data.remote.response.GithubResponse
+import com.cindy.githubuser.data.remote.response.ItemsItem
+import com.cindy.githubuser.data.remote.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,11 +22,7 @@ class MainViewModel: ViewModel() {
     val errorToast: LiveData<String> = _errorToast
     companion object{
         private const val TAG = "MainViewModel"
-        private const val LOGIN = "Arif"
-    }
-
-    init {
-        findUsers(LOGIN)
+        // private const val LOGIN = "Arif"
     }
 
     fun searchUsers(query: String) {

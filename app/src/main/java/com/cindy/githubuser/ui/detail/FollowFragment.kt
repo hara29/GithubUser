@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cindy.githubuser.data.response.ItemsItem
+import com.cindy.githubuser.data.remote.response.ItemsItem
 import com.cindy.githubuser.databinding.FragmentFollowBinding
 import com.cindy.githubuser.ui.UsersAdapter
 import kotlin.properties.Delegates
@@ -37,10 +37,14 @@ class FollowFragment : Fragment() {
 
         val followViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[FollowViewModel::class.java]
         followViewModel.listFollowers.observe(viewLifecycleOwner) { username ->
-            setFollow(username)
+            if (username != null) {
+                setFollow(username)
+            }
         }
         followViewModel.listFollowing.observe(viewLifecycleOwner) { username ->
-            setFollow(username)
+            if (username != null) {
+                setFollow(username)
+            }
         }
         followViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)

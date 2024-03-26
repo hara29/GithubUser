@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.cindy.githubuser.R
-import com.cindy.githubuser.data.response.DetailUserResponse
+import com.cindy.githubuser.data.remote.response.DetailUserResponse
 import com.cindy.githubuser.databinding.ActivityDetailBinding
 import com.google.android.material.tabs.TabLayoutMediator
 

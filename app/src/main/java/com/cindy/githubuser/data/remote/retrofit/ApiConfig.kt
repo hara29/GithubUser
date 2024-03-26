@@ -1,4 +1,4 @@
-package com.cindy.githubuser.data.retrofit
+package com.cindy.githubuser.data.remote.retrofit
 
 import com.cindy.githubuser.BuildConfig
 import okhttp3.Interceptor

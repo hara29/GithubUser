@@ -11,10 +11,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cindy.githubuser.R
-import com.cindy.githubuser.data.response.ItemsItem
+import com.cindy.githubuser.data.remote.response.ItemsItem
 import com.cindy.githubuser.databinding.ActivityMainBinding
 import com.cindy.githubuser.ui.detail.DetailActivity
 import com.cindy.githubuser.ui.UsersAdapter
+import com.cindy.githubuser.ui.favorite.FavoriteActivity
+import com.cindy.githubuser.ui.setting.SettingActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -46,6 +48,22 @@ class MainActivity : AppCompatActivity() {
         binding.rvHeroes.addItemDecoration(itemDecoration)
 
         with(binding) {
+            searchBar.inflateMenu(R.menu.like_menu)
+            searchBar.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.menu_like -> {
+                        val intent = Intent(this@MainActivity, FavoriteActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    R.id.menu_setting -> {
+                        val intent = Intent(this@MainActivity, SettingActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    else -> false
+                }
+            }
             searchView.setupWithSearchBar(searchBar)
             searchView.editText.setOnEditorActionListener { textView, actionId, event ->
                 searchBar.setText(searchView.text)
