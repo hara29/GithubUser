@@ -18,6 +18,7 @@ import kotlin.properties.Delegates
 class FollowFragment : Fragment() {
     private var position by Delegates.notNull<Int>()
     private lateinit var username: String
+    private lateinit var avatar: String
 
     private var _binding:FragmentFollowBinding? = null
     private val binding get() = _binding!!
@@ -58,6 +59,7 @@ class FollowFragment : Fragment() {
         arguments?.let {
             position = it.getInt(ARG_POSITION)
             username = it.getString(ARG_USERNAME).toString()
+            avatar = it.getString(ARG_AVATAR).toString()
         }
         if (position == 1){
             followViewModel.searchFollowers(username)
@@ -71,11 +73,11 @@ class FollowFragment : Fragment() {
         override fun onItemClicked(data: ItemsItem) {
             val moveDataIntent = Intent(activity, DetailActivity::class.java)
             moveDataIntent.putExtra(DetailActivity.EXTRA_USERNAME, data.login)
+            moveDataIntent.putExtra(DetailActivity.EXTRA_AVATAR, data.avatarUrl)
             startActivity(moveDataIntent)
         }
     })
     private fun setFollow(userItems: List<ItemsItem>) {
-        // val adapter = FollowAdapter()
         adapter.submitList(userItems)
         binding.rvHeroes.adapter = adapter
     }
@@ -90,5 +92,6 @@ class FollowFragment : Fragment() {
     companion object {
         const val ARG_POSITION = "position"
         const val ARG_USERNAME = "username"
+        const val ARG_AVATAR = "avatar"
     }
 }

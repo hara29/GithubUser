@@ -22,7 +22,6 @@ class MainViewModel: ViewModel() {
     val errorToast: LiveData<String> = _errorToast
     companion object{
         private const val TAG = "MainViewModel"
-        // private const val LOGIN = "Arif"
     }
 
     fun searchUsers(query: String) {

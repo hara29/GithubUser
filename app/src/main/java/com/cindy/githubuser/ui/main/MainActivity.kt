@@ -6,6 +6,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -17,19 +18,35 @@ import com.cindy.githubuser.ui.detail.DetailActivity
 import com.cindy.githubuser.ui.UsersAdapter
 import com.cindy.githubuser.ui.favorite.FavoriteActivity
 import com.cindy.githubuser.ui.setting.SettingActivity
+import com.cindy.githubuser.ui.setting.SettingPreferences
+import com.cindy.githubuser.ui.setting.SettingViewModel
+import com.cindy.githubuser.ui.setting.SettingViewModelFactory
+import com.cindy.githubuser.ui.setting.dataStore
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         supportActionBar?.hide()
 
-        val mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MainViewModel::class.java]
+        val mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        val pref = SettingPreferences.getInstance(application.dataStore)
+        val settingViewModel = ViewModelProvider(this, SettingViewModelFactory(pref)).get(
+            SettingViewModel::class.java
+        )
+
+        settingViewModel.getThemeSettings().observe(this) { isDarkModeActive ->
+            if (isDarkModeActive) {
+                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
+            }
+        }
         mainViewModel.listUsers.observe(this) { users ->
             setUsersData(users)
         }
@@ -89,6 +106,7 @@ class MainActivity : AppCompatActivity() {
         override fun onItemClicked(data: ItemsItem) {
             val moveDataIntent = Intent(this@MainActivity, DetailActivity::class.java)
             moveDataIntent.putExtra(DetailActivity.EXTRA_USERNAME, data.login)
+            moveDataIntent.putExtra(DetailActivity.EXTRA_AVATAR, data.avatarUrl)
             startActivity(moveDataIntent)
         }
     })

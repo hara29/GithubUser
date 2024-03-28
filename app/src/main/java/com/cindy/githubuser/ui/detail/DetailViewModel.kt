@@ -1,16 +1,23 @@
 package com.cindy.githubuser.ui.detail
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.cindy.githubuser.data.local.entity.FavoriteUser
+import com.cindy.githubuser.data.local.room.FavDao
+import com.cindy.githubuser.data.local.room.FavoriteDatabase
 import com.cindy.githubuser.data.remote.response.DetailUserResponse
 import com.cindy.githubuser.data.remote.retrofit.ApiConfig
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetailViewModel: ViewModel() {
+class DetailViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _detailUser = MutableLiveData<DetailUserResponse>()
     val detailUser: LiveData<DetailUserResponse> = _detailUser
@@ -20,10 +27,18 @@ class DetailViewModel: ViewModel() {
 
     private val _errorToast = MutableLiveData<String>()
     val errorToast: LiveData<String> = _errorToast
-    companion object{
+
+    private var favDao: FavDao
+    private var db : FavoriteDatabase
+
+    companion object {
         private const val TAG = "DetailViewModel"
     }
 
+    init {
+        db = FavoriteDatabase.getDatabase(application)
+        favDao = db.favDao()
+    }
     fun searchUsers(query: String) {
         findDetailUser(query)
     }
@@ -54,5 +69,22 @@ class DetailViewModel: ViewModel() {
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })
+    }
+
+    fun addToFavorite(username: String, avatar: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            val user = FavoriteUser(
+                username,
+                avatar
+            )
+            favDao.insertUser(user)
+        }
+    }
+    fun checkuser(username: String) = favDao.checkUser(username)
+
+    fun deleteUser(username: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            favDao.deleteFromFavorite(username)
+        }
     }
 }
