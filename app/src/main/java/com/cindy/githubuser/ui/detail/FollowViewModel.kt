@@ -1,14 +1,10 @@
 package com.cindy.githubuser.ui.detail
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.cindy.githubuser.data.remote.response.ItemsItem
 import com.cindy.githubuser.data.remote.retrofit.ApiConfig
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import retrofit2.*
 
 class FollowViewModel: ViewModel() {
     private val _listFollowers = MutableLiveData<List<ItemsItem>?>()

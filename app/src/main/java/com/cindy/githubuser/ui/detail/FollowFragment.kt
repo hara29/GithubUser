@@ -3,9 +3,7 @@ package com.cindy.githubuser.ui.detail
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -22,6 +20,15 @@ class FollowFragment : Fragment() {
 
     private var _binding:FragmentFollowBinding? = null
     private val binding get() = _binding!!
+
+    private val adapter = UsersAdapter(object : UsersAdapter.OnItemClickCallback {
+        override fun onItemClicked(data: ItemsItem) {
+            val moveDataIntent = Intent(activity, DetailActivity::class.java)
+            moveDataIntent.putExtra(DetailActivity.EXTRA_USERNAME, data.login)
+            moveDataIntent.putExtra(DetailActivity.EXTRA_AVATAR, data.avatarUrl)
+            startActivity(moveDataIntent)
+        }
+    })
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -69,14 +76,6 @@ class FollowFragment : Fragment() {
 
     }
 
-    private val adapter = UsersAdapter(object : UsersAdapter.OnItemClickCallback {
-        override fun onItemClicked(data: ItemsItem) {
-            val moveDataIntent = Intent(activity, DetailActivity::class.java)
-            moveDataIntent.putExtra(DetailActivity.EXTRA_USERNAME, data.login)
-            moveDataIntent.putExtra(DetailActivity.EXTRA_AVATAR, data.avatarUrl)
-            startActivity(moveDataIntent)
-        }
-    })
     private fun setFollow(userItems: List<ItemsItem>) {
         adapter.submitList(userItems)
         binding.rvHeroes.adapter = adapter

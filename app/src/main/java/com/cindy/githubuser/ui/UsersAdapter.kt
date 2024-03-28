@@ -2,9 +2,7 @@ package com.cindy.githubuser.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.bumptech.glide.Glide
 import com.cindy.githubuser.data.remote.response.ItemsItem
 import com.cindy.githubuser.databinding.ItemUsersBinding

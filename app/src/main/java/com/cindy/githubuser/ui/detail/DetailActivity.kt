@@ -5,21 +5,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.cindy.githubuser.R
 import com.cindy.githubuser.data.remote.response.DetailUserResponse
 import com.cindy.githubuser.databinding.ActivityDetailBinding
-import com.cindy.githubuser.ui.setting.SettingPreferences
-import com.cindy.githubuser.ui.setting.SettingViewModel
-import com.cindy.githubuser.ui.setting.SettingViewModelFactory
-import com.cindy.githubuser.ui.setting.dataStore
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var detailBinding: ActivityDetailBinding
@@ -37,23 +29,12 @@ class DetailActivity : AppCompatActivity() {
         detailBinding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(detailBinding.root)
 
-        val pref = SettingPreferences.getInstance(application.dataStore)
-        val settingViewModel = ViewModelProvider(this, SettingViewModelFactory(pref)).get(
-            SettingViewModel::class.java
-        )
-
-        settingViewModel.getThemeSettings().observe(this) { isDarkModeActive ->
-            if (isDarkModeActive) {
-                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
-            }
-        }
-
         val username = intent.getStringExtra(EXTRA_USERNAME)
         val avatar = intent.getStringExtra(EXTRA_AVATAR)
 
         supportActionBar?.title = username
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
         val detailViewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         if (username != null) {
@@ -118,8 +99,8 @@ class DetailActivity : AppCompatActivity() {
         with(detailBinding){
             tvUser.text = detail.login
             tvName.text = detail.name?: detail.login
-            tvFollowers.text = StringBuilder(detail.followers.toString()).append(" Followers")
-            tvFollowing.text = StringBuilder(detail.following.toString()).append(" Following")
+            tvFollowers.text = StringBuilder(detail.followers.toString()).append(getString(R.string.total_followers))
+            tvFollowing.text = StringBuilder(detail.following.toString()).append(getString(R.string.total_following))
             Glide.with(this@DetailActivity)
                 .load(detail.avatarUrl)
                 .into(imgProfileUser)
@@ -132,5 +113,10 @@ class DetailActivity : AppCompatActivity() {
         } else {
             detailBinding.progressBar2.visibility = View.GONE
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 }

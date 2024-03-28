@@ -2,20 +2,14 @@ package com.cindy.githubuser.ui.detail
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import com.cindy.githubuser.data.local.entity.FavoriteUser
 import com.cindy.githubuser.data.local.room.FavDao
 import com.cindy.githubuser.data.local.room.FavoriteDatabase
 import com.cindy.githubuser.data.remote.response.DetailUserResponse
 import com.cindy.githubuser.data.remote.retrofit.ApiConfig
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.*
+import retrofit2.*
 
 class DetailViewModel(application: Application) : AndroidViewModel(application) {
 

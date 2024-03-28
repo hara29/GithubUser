@@ -3,10 +3,10 @@ package com.cindy.githubuser.ui.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.SearchView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -17,14 +17,18 @@ import com.cindy.githubuser.databinding.ActivityMainBinding
 import com.cindy.githubuser.ui.detail.DetailActivity
 import com.cindy.githubuser.ui.UsersAdapter
 import com.cindy.githubuser.ui.favorite.FavoriteActivity
-import com.cindy.githubuser.ui.setting.SettingActivity
-import com.cindy.githubuser.ui.setting.SettingPreferences
-import com.cindy.githubuser.ui.setting.SettingViewModel
-import com.cindy.githubuser.ui.setting.SettingViewModelFactory
-import com.cindy.githubuser.ui.setting.dataStore
+import com.cindy.githubuser.ui.setting.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val adapter = UsersAdapter(object : UsersAdapter.OnItemClickCallback {
+        override fun onItemClicked(data: ItemsItem) {
+            val moveDataIntent = Intent(this@MainActivity, DetailActivity::class.java)
+            moveDataIntent.putExtra(DetailActivity.EXTRA_USERNAME, data.login)
+            moveDataIntent.putExtra(DetailActivity.EXTRA_AVATAR, data.avatarUrl)
+            startActivity(moveDataIntent)
+        }
+    })
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -34,7 +38,6 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        val mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         val pref = SettingPreferences.getInstance(application.dataStore)
         val settingViewModel = ViewModelProvider(this, SettingViewModelFactory(pref)).get(
             SettingViewModel::class.java
@@ -47,6 +50,8 @@ class MainActivity : AppCompatActivity() {
                 delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
             }
         }
+
+        val mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         mainViewModel.listUsers.observe(this) { users ->
             setUsersData(users)
         }
@@ -59,14 +64,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val layoutManager = LinearLayoutManager(this)
-        binding.rvHeroes.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
-        binding.rvHeroes.addItemDecoration(itemDecoration)
-
-        with(binding) {
-            searchBar.inflateMenu(R.menu.like_menu)
-            searchBar.setOnMenuItemClickListener { menuItem ->
+        with(binding){
+            topAppBar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.menu_like -> {
                         val intent = Intent(this@MainActivity, FavoriteActivity::class.java)
@@ -81,38 +80,31 @@ class MainActivity : AppCompatActivity() {
                     else -> false
                 }
             }
-            searchView.setupWithSearchBar(searchBar)
-            searchView.editText.setOnEditorActionListener { textView, actionId, event ->
-                searchBar.setText(searchView.text)
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    val query = searchView.text.toString().trim()
-                    if (query.isNotEmpty()) {
-                        mainViewModel.searchUsers(query)
-                    } else {
-                        Toast.makeText(this@MainActivity,
-                            getString(R.string.enter_query_warning), Toast.LENGTH_SHORT).show()
-                    }
-                    searchView.hide()
-                    true
-                } else {
-                    false
+            searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(input: String): Boolean {
+                    val query = input.trim()
+                    mainViewModel.searchUsers(query)
+                    searchView.clearFocus()
+                    return true
                 }
+                override fun onQueryTextChange(newText: String): Boolean = false
+            })
+            rvHeroes.apply {
+                layoutManager = LinearLayoutManager(this@MainActivity)
+                addItemDecoration(DividerItemDecoration(this@MainActivity, (layoutManager as LinearLayoutManager).orientation))
+                setHasFixedSize(true)
+                adapter = adapter
             }
         }
-
     }
 
-    private val adapter = UsersAdapter(object : UsersAdapter.OnItemClickCallback {
-        override fun onItemClicked(data: ItemsItem) {
-            val moveDataIntent = Intent(this@MainActivity, DetailActivity::class.java)
-            moveDataIntent.putExtra(DetailActivity.EXTRA_USERNAME, data.login)
-            moveDataIntent.putExtra(DetailActivity.EXTRA_AVATAR, data.avatarUrl)
-            startActivity(moveDataIntent)
-        }
-    })
     private fun setUsersData(userItems: List<ItemsItem>) {
-        adapter.submitList(userItems)
-        binding.rvHeroes.adapter = adapter
+        if (userItems.isEmpty()) {
+            Toast.makeText(this, getString(R.string.user_not_found), Toast.LENGTH_SHORT).show()
+        } else {
+            adapter.submitList(userItems)
+            binding.rvHeroes.adapter = adapter
+        }
     }
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
