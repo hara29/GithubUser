@@ -2,11 +2,9 @@ package com.cindy.githubuser.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.bumptech.glide.Glide
-import com.cindy.githubuser.data.response.ItemsItem
+import com.cindy.githubuser.data.remote.response.ItemsItem
 import com.cindy.githubuser.databinding.ItemUsersBinding
 
 class UsersAdapter (private val onItemClickCallback: OnItemClickCallback) : ListAdapter<ItemsItem, UsersAdapter.MyViewHolder>(DIFF_CALLBACK) {
@@ -22,12 +20,12 @@ class UsersAdapter (private val onItemClickCallback: OnItemClickCallback) : List
             onItemClickCallback.onItemClicked(user)
         }
     }
-    inner class MyViewHolder(val binding: ItemUsersBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MyViewHolder(private val binding: ItemUsersBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(user: ItemsItem){
             binding.tvUsername.text = user.login
             Glide.with(this.itemView.context)
-                .load(user.avatarUrl) // URL Gambar
-                .into(binding.imgProfile) // imageView mana yang akan diterapkan
+                .load(user.avatarUrl)
+                .into(binding.imgProfile)
         }
     }
     companion object {

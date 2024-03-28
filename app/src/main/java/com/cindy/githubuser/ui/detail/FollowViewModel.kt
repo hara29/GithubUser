@@ -1,22 +1,23 @@
-package com.cindy.githubuser.ui
+package com.cindy.githubuser.ui.detail
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.cindy.githubuser.data.response.ItemsItem
-import com.cindy.githubuser.data.retrofit.ApiConfig
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.*
+import com.cindy.githubuser.data.remote.response.ItemsItem
+import com.cindy.githubuser.data.remote.retrofit.ApiConfig
+import retrofit2.*
 
 class FollowViewModel: ViewModel() {
-    private val _listFollowers = MutableLiveData<List<ItemsItem>>()
-    val listFollowers: LiveData<List<ItemsItem>> = _listFollowers
-    private val _listFollowing = MutableLiveData<List<ItemsItem>>()
-    val listFollowing: LiveData<List<ItemsItem>> = _listFollowing
+    private val _listFollowers = MutableLiveData<List<ItemsItem>?>()
+    val listFollowers: MutableLiveData<List<ItemsItem>?> = _listFollowers
+
+    private val _listFollowing = MutableLiveData<List<ItemsItem>?>()
+    val listFollowing: MutableLiveData<List<ItemsItem>?> = _listFollowing
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _errorToast = MutableLiveData<String>()
+    val errorToast: LiveData<String> = _errorToast
     companion object{
         private const val TAG = "FollowViewModel"
     }
@@ -29,7 +30,6 @@ class FollowViewModel: ViewModel() {
     private fun findFollowers(query: String) {
         _isLoading.value = true
         val client = ApiConfig.getApiService().getFollowers(query)
-        // mengeksekusi request secara asynchronous
         client.enqueue(object : Callback<List<ItemsItem>> {
             override fun onResponse(
                 call: Call<List<ItemsItem>>,
@@ -42,11 +42,13 @@ class FollowViewModel: ViewModel() {
                         _listFollowers.value = responseBody
                     }
                 } else {
+                    _errorToast.value = response.message()
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
             override fun onFailure(call: Call<List<ItemsItem>>, t: Throwable) {
                 _isLoading.value = false
+                _errorToast.value = t.message
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })
@@ -54,7 +56,6 @@ class FollowViewModel: ViewModel() {
     private fun findFollowing(query: String) {
         _isLoading.value = true
         val client = ApiConfig.getApiService().getFollowing(query)
-        // mengeksekusi request secara asynchronous
         client.enqueue(object : Callback<List<ItemsItem>> {
             override fun onResponse(
                 call: Call<List<ItemsItem>>,
@@ -67,11 +68,13 @@ class FollowViewModel: ViewModel() {
                         _listFollowing.value = responseBody
                     }
                 } else {
+                    _errorToast.value = response.message()
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
             override fun onFailure(call: Call<List<ItemsItem>>, t: Throwable) {
                 _isLoading.value = false
+                _errorToast.value = t.message
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })
