@@ -29,10 +29,11 @@ This application empowers users to effortlessly search for GitHub users, delve i
 
 ### Light Mode
 
-![GithubUser LighMode](https://github.com/user-attachments/assets/c023066b-a3bf-49b5-aa42-5c960399090b)
+![GithubUser_LightMode](https://github.com/user-attachments/assets/ff5aef5e-e2b9-4c07-9295-971c75663c1d)
 
 
 ### Dark Mode
 
-![GithubUser_DarkMode](https://github.com/user-attachments/assets/90209d5a-2dd3-4ca5-8fe3-d395d96d9ff8)
+![GithubUser_DarkMode](https://github.com/user-attachments/assets/53943ff2-4bda-4002-a09f-009022affd7a)
+
 
